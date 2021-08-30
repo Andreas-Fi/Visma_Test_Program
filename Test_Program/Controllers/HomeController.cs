@@ -10,34 +10,59 @@ namespace Test_Program.Controllers
 {
     public class HomeController : Controller
     {
+        static private List<Customer> customers = new List<Customer>();
+        static private List<Product> products = new List<Product>();
+        static private List<CustomerProducts> customerProducts = new List<CustomerProducts>();
+        static private bool seeded = false;
+
+        /// <summary>
+        /// Home page
+        /// shows all of the customers in a list
+        /// website.com/
+        /// </summary>
+        /// <returns> The view </returns>
         public IActionResult Index()
         {
-            return View();
+            //Seeds the program only once
+            if (!seeded)
+            {
+                Seed();
+                seeded = true;
+            }
+
+            return View(customers);
         }
 
-        public IActionResult About()
+        /// <summary>
+        /// View for viewing the products and prices for a company
+        /// website.com/Details/id
+        /// </summary>
+        /// <param name="id"> Customer ID </param>
+        /// <returns> View to the user </returns>
+        public ActionResult Details(int id)
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
+            return View(new CustomerProducts() { Customer = customerProducts[id].Customer, Products = customerProducts[id].GetUpdatedPrices() });
         }
 
-        public IActionResult Contact()
+        /// <summary>
+        /// Seeds the information into the program
+        /// Would be replaced by databases
+        /// </summary>
+        static private void Seed()
         {
-            ViewData["Message"] = "Your contact page.";
+            customers.Add(new Customer(0, "ABC", 245621, 0, 0.2));
+            customers.Add(new Customer(1, "ABB", 769435, 0.3, 0));
+            customers.Add(new Customer(2, "New company", 0, 0, 0));
 
-            return View();
-        }
+            products.Add(new Product() { Id = 0, Name = "Soffa", Price = 400 });
+            products.Add(new Product() { Id = 1, Name = "Bed", Price = 300 });
+            products.Add(new Product() { Id = 2, Name = "Chair", Price = 50 });
+            products.Add(new Product() { Id = 3, Name = "Table", Price = 100 });
+            products.Add(new Product() { Id = 4, Name = "Lamp", Price = 30 });
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            customerProducts.Add(new CustomerProducts() { Customer = customers[0], Products = products.GetRange(1, 3) });
+            customerProducts.Add(new CustomerProducts() { Customer = customers[1], Products = products });
+            customerProducts.Add(new CustomerProducts() { Customer = customers[2], Products = products.GetRange(3, 2) });
         }
     }
 }

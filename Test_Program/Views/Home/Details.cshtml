@@ -1,0 +1,56 @@
+﻿@model Test_Program.Models.CustomerProducts
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h2>Product details for @Model.Customer.Name</h2>
+
+<div>
+    <hr />
+    <!-- Lists all products the customer sells aswell as all the prices for the products-->
+    @foreach (var item in Model.Products)
+    {
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayFor(model => item.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => item.Price)
+            </dd>
+        </dl>
+    }
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Products Sold
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Customer.ProductsSold)
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>
+            Special Deals
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Customer.SpecialDeals)
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>
+            Other Deals
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Customer.OtherDeals)
+        </dd>
+    </dl>
+
+
+
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
